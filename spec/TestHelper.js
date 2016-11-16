@@ -2,7 +2,7 @@
 
     function createDummyNotes() {
 
-        var notesListStorageKey = "Notes.NotesList";
+        var notesListStorageKey = "Notes.NotesListTest";
         var notesCount = 10;
         var notes = [];
 

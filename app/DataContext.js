@@ -1,22 +1,18 @@
-var Notes = Notes || {};
+﻿var Notes = Notes || {};
 
-Notes.dataContext = (function () {
-
-    var notesList = [];
-    var notesListStorageKey = "Notes.NotesList";
-
-    function init() {
-        loadNotesFromLocalStorage();
-    }
+Notes.dataContext = (function ($) {
+    "use strict";
+    var notesList = [],
+    notesListStorageKey;
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    };
 
-    function createBlankNote() {
+    var createBlankNote = function () {
 
         var dateCreated = new Date();
-        var id = new String(dateCreated.getTime()) + new String(getRandomInt(0, 100));
+        var id = dateCreated.getTime().toString() + (getRandomInt(0, 100)).toString();
         var noteModel = new Notes.NoteModel({
             id: id,
             dateCreated: dateCreated,
@@ -25,9 +21,9 @@ Notes.dataContext = (function () {
         });
 
         return noteModel;
-    }
+    };
 
-    function loadNotesFromLocalStorage() {
+    var loadNotesFromLocalStorage = function () {
 
         var storedNotes = $.jStorage.get(notesListStorageKey);
 
@@ -35,16 +31,48 @@ Notes.dataContext = (function () {
             notesList = storedNotes;
         }
 
-    }
-
-    function getNotesList() {
-        return notesList;
-    }
-
-    return {
-        init: init,
-        createBlankNote: createBlankNote,
-        getNotesList: getNotesList
     };
 
-})();
+    var saveNotesToLocalStorage = function () {
+        $.jStorage.set(notesListStorageKey, notesList);
+    };
+
+    var saveNote = function (noteModel) {
+
+        var found = false;
+        var i;
+
+        for (i = 0; i < notesList.length; i += 1) {
+            if (notesList[i].id === noteModel.id) {
+                notesList[i] = noteModel;
+                found = true;
+                i = notesList.length;
+            }
+        }
+
+        if (!found) {
+            notesList.splice(0, 0, noteModel);
+        }
+
+        saveNotesToLocalStorage();
+    };
+
+    var getNotesList = function () {
+        return notesList;
+    };
+
+    var init = function (storageKey) {
+        notesListStorageKey = storageKey;
+        loadNotesFromLocalStorage();
+    };
+
+    var pub = {
+        init: init,
+        createBlankNote: createBlankNote,
+        getNotesList: getNotesList,
+        saveNote: saveNote
+    };
+
+    return pub;
+
+} (jQuery));
