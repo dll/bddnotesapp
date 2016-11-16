@@ -57,6 +57,19 @@ Notes.dataContext = (function ($) {
         saveNotesToLocalStorage();
     };
 
+    var deleteNote = function (noteModel) {
+
+        var i;
+        for (i = 0; i < notesList.length; i += 1) {
+            if (notesList[i].id === noteModel.id) {
+                notesList.splice(i, 1);
+                i = notesList.length;
+            }
+        }
+
+        saveNotesToLocalStorage();
+    };
+
     var getNotesList = function () {
         return notesList;
     };
@@ -70,7 +83,8 @@ Notes.dataContext = (function ($) {
         init: init,
         createBlankNote: createBlankNote,
         getNotesList: getNotesList,
-        saveNote: saveNote
+        saveNote: saveNote,
+        deleteNote: deleteNote
     };
 
     return pub;

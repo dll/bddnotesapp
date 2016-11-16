@@ -45,5 +45,26 @@
             <a id="delete-note-button" data-icon="delete" data-transition="slideup" data-rel="dialog">Delete</a>
         </div>
     </div>
+    <!--Invalid Note dialog-->
+    <div id="invalid-note-dialog" data-role="dialog" data-title="Invalid Note" data-theme="e">
+        <div data-role="header" data-theme="e">
+            <h1>Wait!</h1>
+        </div>
+        <div data-role="content">
+            <p>Enter a title for this note.</p>
+        </div>
+    </div>
+    <!-- Confirm Delete Note dialog-->
+    <div id="confirm-delete-note-dialog" data-role="dialog" data-title="Delete Note" >
+        <div data-role="header">
+        <h1>
+                Delete Note?</h1>
+        </div>
+        <div data-role="content">            
+            <div id="delete-note-content-placeholder"></div>
+            <a id="cancel-delete-note-button" data-role="button" data-theme="b" data-rel="back">No</a>
+            <a id="ok-to-delete-note-button" data-role="button" data-theme="f">Yes</a>
+        </div>
+    </div>
 </body>
 </html>

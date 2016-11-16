@@ -10,7 +10,7 @@
         invalidNoteDlgSel = "#invalid-note-dialog",
         defaultDlgTrsn = { transition: "slideup" },
         deleteNoteButtonSel = "#delete-note-button",
-        deleteNoteTitlePlaceholderSel = "#delete-note-title-placeholder",
+        deleteNoteContentPlaceholderSel = "#delete-note-content-placeholder",
         confirmDeleteNoteDlgSel = "#confirm-delete-note-dialog",
         okToDeleteNoteButtonSel = "#ok-to-delete-note-button",
         currentNote = null;
@@ -200,8 +200,29 @@
             returnToNotesListPage();
 
         } else {
-            // TODO: Inform the user the note is invalid.
+            $.mobile.changePage(invalidNoteDlgSel, defaultDlgTrsn);
         }
+    };
+
+    var onDeleteNoteButtonTapped = function () {
+
+        if (currentNote) {
+            // JRender selected note in confirmation dlg.
+            // Deletion will be handled elsewhere, after user confirms it's ok to delete.
+           
+            var noteContentPlaceholder = $(deleteNoteContentPlaceholderSel);
+
+            noteContentPlaceholder.empty();
+            $("<h3>" + currentNote.title + "</h3><p>" + currentNote.narrative + "</p>").appendTo(noteContentPlaceholder);
+
+            $.mobile.changePage(confirmDeleteNoteDlgSel, defaultDlgTrsn);
+        }
+    };
+
+    var onOKToDeleteNoteButtonTapped = function () {
+
+        dataContext.deleteNote(currentNote);
+        returnToNotesListPage();
     };
 
     var init = function () {
@@ -211,6 +232,8 @@
         d.bind("pagebeforechange", onPageBeforeChange);
         d.bind("pagechange", onPageChange);
         d.delegate(saveNoteButtonSel, "tap", onSaveNoteButtonTapped);
+        d.delegate(deleteNoteButtonSel, "tap", onDeleteNoteButtonTapped);
+        d.delegate(okToDeleteNoteButtonSel, "tap", onOKToDeleteNoteButtonTapped);
     };
 
     var pub = {

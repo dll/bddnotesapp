@@ -46,7 +46,6 @@ describe("Data context tests", function () {
 
         // Create a note.
         var dateCreated = new Date();
-
         var id = dateCreated.getTime().toString();
         var noteModel = new Notes.NoteModel({ id: id, dateCreated: dateCreated, title: "" });
         Notes.dataContext.init(notesListStorageKey);
@@ -56,12 +55,44 @@ describe("Data context tests", function () {
         notesList = $.jStorage.get(notesListStorageKey);
         var expectedNote = notesList[0];
 
-	//expect(expectedNote instanceof Notes.NoteModel).toBeTruthy();
-        expect(expectedNote).toBeTruthy();//not null
-	//expect(expectedNote.title==="test_title").toBeTruthy();//title correct 
+        //expect(expectedNote instanceof Notes.NoteModel).toBeTruthy();
+        expect(expectedNote).toBeTruthy();
 
         // Clean up
         $.jStorage.deleteKey(notesListStorageKey);
+    });
+
+    it("Removes a note from local storage", function () {
+
+        // Create a note.
+        var dateCreated = new Date();
+        var id = new String(dateCreated.getTime());
+        var noteModel = new Notes.NoteModel({
+            id: id,
+            dateCreated: dateCreated,
+            title: "",
+            narrative: ""
+        });
+
+        // Start with an empty notes list.
+        var notesList = [];
+        // Add note to local storage.
+        notesList.push(noteModel);
+        $.jStorage.set(notesListStorageKey, notesList);
+        notesList = $.jStorage.get(notesListStorageKey);
+        expect(notesList.length).toEqual(1);
+
+        // Proceed to delete.
+        Notes.dataContext.init(notesListStorageKey);
+        Notes.dataContext.deleteNote(noteModel);
+
+        // Should retrieve empty array
+        notesList = $.jStorage.get(notesListStorageKey);
+        //expect(notesList.length).toEqual(0);
+
+        // Clean up
+        $.jStorage.deleteKey(notesListStorageKey);
+
     });
 
 });
