@@ -8,6 +8,7 @@ Notes.NoteModel = function (config) {
     this.narrative = config.narrative;
 };
 
+//prototype方法，向NoteModel添加验证方法
 Notes.NoteModel.prototype.isValid = function () {
     "use strict";
     if (this.title && this.title.length > 0) {
